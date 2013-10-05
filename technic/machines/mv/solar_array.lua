@@ -13,7 +13,7 @@ minetest.register_node("technic:solar_array_mv", {
 	active = false,
 	drawtype = "nodebox",
 	paramtype = "light",
-	is_ground_content = true,	
+	is_ground_content = true,
 	node_box = {
 			type = "fixed",
 			fixed = {-0.5, -0.5, -0.5, 0.5, 0, 0.5},
@@ -67,7 +67,7 @@ minetest.register_abm(
 		if light >= 12 and time_of_day>=0.24 and time_of_day<=0.76 and pos.y > -10 then
 		   local charge_to_give = math.floor(light*(light*2.4+pos1.y/130*12))
 		   if charge_to_give<0   then charge_to_give=0 end
-		   if charge_to_give>160 then charge_to_give=160 end
+		   if charge_to_give>1000 then charge_to_give=1000 end
 		   meta:set_string("infotext", "Solar Array is active ("..charge_to_give.."EU)")
 		   --			meta:set_float("active",1)
 		   meta:set_int("MV_EU_supply", charge_to_give)
@@ -76,7 +76,7 @@ minetest.register_abm(
 		   meta:set_int("MV_EU_supply", 0)
 		end
 	     end,
- }) 
+ })
 
 technic.register_MV_machine ("technic:solar_array_mv","PR")
 
