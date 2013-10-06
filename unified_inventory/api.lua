@@ -24,8 +24,8 @@ unified_inventory.home_filename = minetest.get_worldpath()..'/unified_inventory_
 -- Create detached creative inventory after loading all mods
 -- Also 2nd attempt to disable default creative mod
 minetest.after(0.01, function()
-	
-	if creative_inventory then 
+
+	if creative_inventory then
 		creative_inventory.set_creative_formspec = function(player, start_i, pagenum)
 		return
 		end
@@ -40,7 +40,7 @@ minetest.after(0.01, function()
 			if unified_inventory.crafts_table[name]==nil then
 				unified_inventory.crafts_table[name] = {}
 			end
-			if recipes then 
+			if recipes then
 				for i=1,#recipes,1 do
 					table.insert(unified_inventory.crafts_table[name],recipes[i])
 				end
@@ -66,7 +66,7 @@ minetest.register_on_joinplayer(function(player)
 	unified_inventory.alternate[player_name] = 1
 	unified_inventory.current_item[player_name] =nil
 	unified_inventory.set_inventory_formspec(player,unified_inventory.get_formspec(player, unified_inventory.default))
-	
+
 --crafting guide inventories
 local inv = minetest.create_detached_inventory(player:get_player_name().."craftrecipe",{
 	allow_put = function(inv, listname, index, stack, player)
@@ -108,7 +108,9 @@ unified_inventory.trash = minetest.create_detached_inventory("trash", {
 		if minetest.setting_getbool("creative_mode") then
 			return stack:get_count()
 		else
-			return 0
+-- 			HACK: override creative check
+-- 			return 0
+			return stack:get_count()
 		end
 	end,
 	on_put = function(inv, listname, index, stack, player)
@@ -132,7 +134,7 @@ unified_inventory.get_formspec = function(player,page)
 	if player==nil then return "" end
 	local player_name = player:get_player_name()
 	unified_inventory.current_page[player_name]=page
-	
+
 	local formspec = "size[14,10]"
 
 	-- player inventory
@@ -178,7 +180,7 @@ unified_inventory.get_formspec = function(player,page)
 		formspec = formspec .. "image_button["..(start_x+.65*6)..",9;.8,.8;ui_moon_icon.png;misc_set_night;]"
 		formspec = formspec .. "image_button["..(start_x+.65*7)..",9;.8,.8;ui_trash_icon.png;clear_inv;]"
 		end
-		
+
 	--controls to flip items pages
 		start_x=9.2
 		formspec = formspec .. "image_button["..(start_x+.6*0)..",9;.8,.8;ui_skip_backward_icon.png;start_list;]"
@@ -187,7 +189,7 @@ unified_inventory.get_formspec = function(player,page)
 		formspec = formspec .. "image_button["..(start_x+.6*3)..",9;.8,.8;ui_right_icon.png;forward1;]"
 		formspec = formspec .. "image_button["..(start_x+.6*4)..",9;.8,.8;ui_doubleright_icon.png;forward3;]"
 		formspec = formspec .. "image_button["..(start_x+.6*5)..",9;.8,.8;ui_skip_forward_icon.png;end_list;]"
-		
+
 	-- search box
 		formspec = formspec .. "field[9.5,8.325;3,1;searchbox;;]"
 		formspec = formspec .. "image_button[12.2,8.1;.8,.8;ui_search_icon.png;searchbutton;]"
@@ -197,12 +199,13 @@ unified_inventory.get_formspec = function(player,page)
 		formspec = formspec.."label[0,0;Crafting]"
 		formspec = formspec.."list[current_player;craftpreview;6,1;1,1;]"
 		formspec = formspec.."list[current_player;craft;2,1;3,3;]"
-			if minetest.setting_getbool("creative_mode") then
-				formspec = formspec.."label[0,2.5;Refill:]"
-				formspec = formspec.."list[detached:"..player_name.."refill;main;0,3;1,1;]"
+-- 			HACK: override creative check & disabling refill at all. needs code cleanup
+-- 			if minetest.setting_getbool("creative_mode") then
+-- 				formspec = formspec.."label[0,2.5;Refill:]"
+-- 				formspec = formspec.."list[detached:"..player_name.."refill;main;0,3;1,1;]"
 				formspec = formspec.."label[7,2.5;Trash:]"
 				formspec = formspec.."list[detached:trash;main;7,3;1,1;]"
-			end
+-- 			end
 		end
 
 	-- craft guide page
@@ -215,7 +218,7 @@ unified_inventory.get_formspec = function(player,page)
 		formspec = formspec.."label[6,2.6;Method:]"
 		local item_name=unified_inventory.current_item[player_name]
 		if item_name then
-			formspec = formspec.."label[2,0;"..item_name.."]"	
+			formspec = formspec.."label[2,0;"..item_name.."]"
 			local alternates = 0
 			local alternate = unified_inventory.alternate[player_name]
 			local crafts = unified_inventory.crafts_table[item_name]
@@ -226,16 +229,16 @@ unified_inventory.get_formspec = function(player,page)
 				local method = "Crafting"
 				if craft.type == "shapeless" then
 				method="Crafting"
-				end	
+				end
 				if craft.type == "cooking" then
 				method="Cooking"
-				end	
+				end
 				if craft.type == "fuel" then
 				method="Fuel"
-				end	
+				end
 				if craft.type == "grinding" then
 				method="Grinding"
-				end	
+				end
 				if craft.type == "alloy" then
 				method="Alloy cooking"
 				end
@@ -244,10 +247,10 @@ unified_inventory.get_formspec = function(player,page)
 				end
 				if craft.type == "compressing" then
 				method="Compressing"
-				end		
+				end
 				formspec = formspec.."label[6,3;"..method.."]"
 			end
-			
+
 			if alternates > 1 then
 			formspec = formspec.."label[0,2.6;Recipe "..tostring(alternate).." of "..tostring(alternates).."]"
 			formspec = formspec.."button[0,3.15;2,1;alternate;Alternate]"
@@ -284,13 +287,13 @@ unified_inventory.get_formspec = function(player,page)
 	local item={}
 	for y=0,9,1 do
 	for x=0,7,1 do
-		name=unified_inventory.filtered_items_list[player_name][list_index]	
+		name=unified_inventory.filtered_items_list[player_name][list_index]
 		if minetest.registered_items[name] then
 		formspec=formspec.."item_image_button["..(8.2+x*.7)..","..(1+y*.7)..";.81,.81;"..name..";item_button"..list_index..";]"
 		list_index=list_index+1
 		end
 	end
-	end	
+	end
 	formspec=formspec.."label[8.2,0;Page:]"
 	formspec=formspec.."label[9,0;"..page.." of "..pagemax.."]"
 	formspec=formspec.."label[8.2,0.4;Filter:]"
@@ -349,7 +352,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		unified_inventory.go_home(player)
 	end
 	if fields.misc_set_day then
-		if minetest.get_player_privs(player_name).settime==true then 
+		if minetest.get_player_privs(player_name).settime==true then
 		minetest.sound_play("birds", {to_player=player_name, gain = 1.0})
 		minetest.env:set_timeofday((6000 % 24000) / 24000)
 		minetest.chat_send_player(player_name, "Time of day set to 6am")
@@ -358,13 +361,13 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 	if fields.misc_set_night then
-		if minetest.get_player_privs(player_name).settime==true then 	
+		if minetest.get_player_privs(player_name).settime==true then
 		minetest.sound_play("owl", {to_player=player_name, gain = 1.0})
 		minetest.env:set_timeofday((21000 % 24000) / 24000)
 		minetest.chat_send_player(player_name, "Time of day set to 9pm")
 		else
-		minetest.chat_send_player(player_name, "You don't have settime priviledge!")	
-		end	
+		minetest.chat_send_player(player_name, "You don't have settime priviledge!")
+		end
 	end
 
 	if fields.clear_inv then
@@ -373,12 +376,12 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		minetest.chat_send_player(player_name, 'Inventory Cleared!')
 		minetest.sound_play("trash_all", {to_player=player_name, gain = 1.0})
 	end
-	
+
 	-- Inventory page controls
 	local start=math.floor(unified_inventory.current_index[player_name]/80 +1 )
 	local start_i=start
 	local pagemax = math.floor((unified_inventory.filtered_items_list_size[player_name]-1) / (80) + 1)
-	
+
 	if fields.start_list then
 		minetest.sound_play("paperflip1", {to_player=player_name, gain = 1.0})
 		start_i = 1
@@ -413,20 +416,20 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		unified_inventory.current_index[player_name] = (start_i-1)*80+1
 		unified_inventory.set_inventory_formspec(player, unified_inventory.get_formspec(player,unified_inventory.current_page[player_name]))
 		end
-	
+
 	-- Item list buttons
 	local list_index=unified_inventory.current_index[player_name]
 	local page=unified_inventory.current_page[player_name]
 	for i=0,80,1 do
 		local button="item_button"..list_index
-		if fields[button] then 
+		if fields[button] then
 			minetest.sound_play("click", {to_player=player_name, gain = 0.1})
 			if minetest.setting_getbool("creative_mode")==false then
 				unified_inventory.set_inventory_formspec(player, unified_inventory.get_formspec(player,"craftguide"))
 				page="craftguide"
 				end
-			if page=="craftguide" then 
-				unified_inventory.current_item[player_name] = unified_inventory.filtered_items_list[player_name][list_index] 
+			if page=="craftguide" then
+				unified_inventory.current_item[player_name] = unified_inventory.filtered_items_list[player_name][list_index]
 				unified_inventory.alternate[player_name] = 1
 				unified_inventory.update_recipe (player, unified_inventory.filtered_items_list[player_name][list_index], 1)
 				unified_inventory.set_inventory_formspec(player, unified_inventory.get_formspec(player,unified_inventory.current_page[player_name]))
@@ -434,23 +437,23 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				if minetest.setting_getbool("creative_mode") then
 					local inv = player:get_inventory()
 					dst_stack={}
-					dst_stack["name"] = unified_inventory.filtered_items_list[player_name][list_index] 
+					dst_stack["name"] = unified_inventory.filtered_items_list[player_name][list_index]
 					dst_stack["count"]=99
 					if inv:room_for_item("main",dst_stack) then
 					inv:add_item("main",dst_stack)
 					end
-				end	
-			end	
-		end	
+				end
+			end
+		end
 	list_index=list_index+1
 	end
-	
+
 	if fields.searchbutton then
 		unified_inventory.apply_filter(player, fields.searchbox)
 		unified_inventory.set_inventory_formspec(player, unified_inventory.get_formspec(player,unified_inventory.current_page[player_name]))
 		minetest.sound_play("paperflip2", {to_player=player_name, gain = 1.0})
-	end	
-	
+	end
+
 	-- alternate button
 	if fields.alternate then
 		minetest.sound_play("click", {to_player=player_name, gain = 0.1})
@@ -467,12 +470,12 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			if alternate>alternates then
 				alternate=1
 			end
-			unified_inventory.alternate[player_name]=alternate		
+			unified_inventory.alternate[player_name]=alternate
 			unified_inventory.update_recipe (player, unified_inventory.current_item[player_name], alternate)
 			unified_inventory.set_inventory_formspec(player, unified_inventory.get_formspec(player,unified_inventory.current_page[player_name]))
 			end
-		end	
-	end		
+		end
+	end
 end)
 
 -- load_home
@@ -510,7 +513,7 @@ unified_inventory.set_home = function(player, pos)
 	io.close(output)
 end
 
--- go_home 
+-- go_home
 unified_inventory.go_home = function(player)
 	local pos = homepos[player:get_player_name()]
 	if pos~=nil then
@@ -520,12 +523,12 @@ end
 
 --apply filter to the inventory list (create filtered copy of full one)
 unified_inventory.apply_filter = function(player,filter)
-	local player_name = player:get_player_name() 
+	local player_name = player:get_player_name()
 	local size=0
 	local str_temp1=string.lower(filter)
-	if str_temp1 ~= "" then 
+	if str_temp1 ~= "" then
 		for i=1,str_temp1:len(),1 do
-			if string.byte(str_temp1,i) == 91 then 
+			if string.byte(str_temp1,i) == 91 then
 				str_temp1=""
 				end
 			end
@@ -543,11 +546,11 @@ unified_inventory.apply_filter = function(player,filter)
 				size=size+1
 			end
 		end
-	
+
 	end
 	table.sort(unified_inventory.filtered_items_list[player_name])
 	unified_inventory.filtered_items_list_size[player_name]=size
-	unified_inventory.current_index[player_name]=1	
+	unified_inventory.current_index[player_name]=1
 	unified_inventory.activefilter[player_name]=filter
 	unified_inventory.set_inventory_formspec(player, unified_inventory.get_formspec(player,unified_inventory.current_page[player_name]))
 end
@@ -555,7 +558,7 @@ end
 
 -- update_recipe
 unified_inventory.update_recipe = function(player, stack_name, alternate)
-	local inv = minetest.get_inventory({type="detached", name=player:get_player_name().."craftrecipe"})	
+	local inv = minetest.get_inventory({type="detached", name=player:get_player_name().."craftrecipe"})
 	for i=0,inv:get_size("build"),1 do
 		inv:set_stack("build", i, nil)
 	end
@@ -582,7 +585,7 @@ unified_inventory.update_recipe = function(player, stack_name, alternate)
 		if def then
 			inv:set_stack("build", 1, def)
 		end
-		return 
+		return
 	end
 	if craft.width==0 then
 	local build_table={1,2,3}
