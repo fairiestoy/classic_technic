@@ -2,7 +2,7 @@ minetest.register_craft({
 	output = 'technic:wind_mill_frame 5',
 	recipe = {
 		{'default:steel_ingot', '',                    'default:steel_ingot'},
-		{'',                    'default:steel_ingot', ''},
+		{'',                    'default:glass', ''},
 		{'default:steel_ingot', '',                    'default:steel_ingot'},
 	}
 })
