@@ -115,15 +115,30 @@ local add_new_cable_node = function(nodes,pos)
 local check_node_subp = function(PR_nodes,RE_nodes,BA_nodes,all_nodes,pos,machines,cablename)
 			   local meta = minetest.env:get_meta(pos)
 			   local name = minetest.env:get_node(pos).name
+			   local p_name = name..':'..pos.x..','..pos.y..','..pos.z
 			   if meta:get_float(cablename)==1 then
 			      add_new_cable_node(all_nodes,pos)
 			   elseif machines[name] then
-			      --dprint(name.." is a "..machines[name])
 			      if     machines[name] == "PR" then
 				 add_new_cable_node(PR_nodes,pos)
 			      elseif machines[name] == "RE" then
 				 add_new_cable_node(RE_nodes,pos)
 			      elseif machines[name] == "BA" then
+				 add_new_cable_node(BA_nodes,pos)
+			      end
+			      if cablename == "cablelike" then
+				 meta:set_int("LV_EU_timeout", 2) -- Touch node
+			      elseif cablename == "mv_cablelike" then
+				 meta:set_int("MV_EU_timeout", 2) -- Touch node
+			      elseif cablename == "hv_cablelike" then
+				 meta:set_int("HV_EU_timeout", 2) -- Touch node
+			      end
+			   elseif machines[p_name] then
+			      if     machines[p_name] == "PR" then
+				 add_new_cable_node(PR_nodes,pos)
+			      elseif machines[p_name] == "RE" then
+				 add_new_cable_node(RE_nodes,pos)
+			      elseif machines[p_name] == "BA" then
 				 add_new_cable_node(BA_nodes,pos)
 			      end
 			      if cablename == "cablelike" then
@@ -144,13 +159,13 @@ local traverse_network = function(PR_nodes,RE_nodes,BA_nodes,all_nodes, i, machi
 			    pos.x=pos.x-2
 			    check_node_subp(PR_nodes,RE_nodes,BA_nodes,all_nodes,pos, machines, cablename)
 			    pos.x=pos.x+1
-			    
+
 			    pos.y=pos.y+1
 			    check_node_subp(PR_nodes,RE_nodes,BA_nodes,all_nodes,pos, machines, cablename)
 			    pos.y=pos.y-2
 			    check_node_subp(PR_nodes,RE_nodes,BA_nodes,all_nodes,pos, machines, cablename)
 			    pos.y=pos.y+1
-			    
+
 			    pos.z=pos.z+1
 			    check_node_subp(PR_nodes,RE_nodes,BA_nodes,all_nodes,pos, machines, cablename)
 			    pos.z=pos.z-2
@@ -177,7 +192,7 @@ minetest.register_abm(
 		    local network   = ""
 		    local all_nodes = {}
 		    local PR_nodes  = {}
-		    local BA_nodes  = {} 
+		    local BA_nodes  = {}
 		    local RE_nodes  = {}
 
 --		    -- Possible to turn off the entire network
@@ -200,7 +215,6 @@ minetest.register_abm(
 		    meta1  = minetest.env:get_meta(pos1)
 		    if meta1:get_float("cablelike") ==1 then
 		       -- LV type
-		       --dprint("LV type")
 		       network = "LV"
 		       local table_index = 1
 		       repeat
@@ -210,7 +224,6 @@ minetest.register_abm(
 		       until false
 		    elseif meta1:get_float("mv_cablelike") ==1 then
 		       -- MV type
-		       --dprint("MV type")
 		       network = "MV"
 		       local table_index = 1
 		       repeat
@@ -220,7 +233,6 @@ minetest.register_abm(
 		       until false
 		    elseif meta1:get_float("hv_cablelike") ==1 then
 		       -- HV type
-		       --dprint("HV type")
 		       network = "HV"
 		       local table_index = 1
 		       repeat
@@ -230,11 +242,9 @@ minetest.register_abm(
 		       until false
 		    else
 		       -- No type :-)
-		       --dprint("Not connected to a network")
 		       meta:set_string("infotext", "Switching Station - no network")
 		       return
 		    end
-		    --dprint("nodes="..table.getn(all_nodes).." PR="..table.getn(PR_nodes).." BA="..table.getn(BA_nodes).." RE="..table.getn(RE_nodes))
 
 		    -- Strings for the meta data
 		    local eu_demand_str    = network.."_EU_demand"
@@ -248,7 +258,6 @@ minetest.register_abm(
 		       meta1  = minetest.env:get_meta(pos1)
 		       PR_eu_supply = PR_eu_supply + meta1:get_int(eu_supply_str)
 		    end
-		    --dprint("Total PR supply:"..PR_eu_supply)
 
 		    -- Get all the demand from the RE nodes
 		    local RE_eu_demand = 0
@@ -256,7 +265,7 @@ minetest.register_abm(
 		       meta1  = minetest.env:get_meta(pos1)
 		       RE_eu_demand = RE_eu_demand + meta1:get_int(eu_demand_str)
 		    end
-		    --dprint("Total RE demand:"..RE_eu_demand)
+		    print("Total RE demand:"..RE_eu_demand)
 
 		    -- Get all the power from the BA nodes
 		    local BA_eu_supply = 0
@@ -264,7 +273,7 @@ minetest.register_abm(
 		       meta1  = minetest.env:get_meta(pos1)
 		       BA_eu_supply = BA_eu_supply + meta1:get_int(eu_supply_str)
 		    end
-		    --dprint("Total BA supply:"..BA_eu_supply)
+		    print("Total BA supply:"..BA_eu_supply)
 
 		    -- Get all the demand from the BA nodes
 		    local BA_eu_demand = 0
@@ -272,13 +281,13 @@ minetest.register_abm(
 		       meta1  = minetest.env:get_meta(pos1)
 		       BA_eu_demand = BA_eu_demand + meta1:get_int(eu_demand_str)
 		    end
-		    --dprint("Total BA demand:"..BA_eu_demand)
+		    print("Total BA demand:"..BA_eu_demand)
 
 		    meta:set_string("infotext", "Switching Station. PR("..(PR_eu_supply+BA_eu_supply)..") RE("..(RE_eu_demand+BA_eu_demand)..")")
 
 		    -- If the PR supply is enough for the RE demand supply them all
 		    if PR_eu_supply >= RE_eu_demand then
-		       --dprint("PR_eu_supply"..PR_eu_supply.." >= RE_eu_demand"..RE_eu_demand)
+		       print("PR_eu_supply"..PR_eu_supply.." >= RE_eu_demand"..RE_eu_demand)
 		       for _,pos1 in pairs(RE_nodes) do
 			  meta1  = minetest.env:get_meta(pos1)
 			  local eu_demand = meta1:get_int(eu_demand_str)
@@ -295,7 +304,7 @@ minetest.register_abm(
 			  meta1  = minetest.env:get_meta(pos1)
 			  local eu_demand = meta1:get_int(eu_demand_str)
 			  meta1:set_int(eu_input_str, math.floor(eu_demand*charge_factor))
-			  --dprint("Charging battery:"..math.floor(eu_demand*charge_factor))
+			  print("Charging battery:"..math.floor(eu_demand*charge_factor))
 		       end
 		       -- If still a surplus we can start giving back to the fuel burning generators
 		       -- Only full EU packages are given back. The rest is wasted.
@@ -319,7 +328,7 @@ minetest.register_abm(
 
 		    -- If the PR supply is not enough for the RE demand we will discharge the batteries too
 		    if PR_eu_supply+BA_eu_supply >= RE_eu_demand then
-		       --dprint("PR_eu_supply "..PR_eu_supply.."+BA_eu_supply "..BA_eu_supply.." >= RE_eu_demand"..RE_eu_demand)
+		       print("PR_eu_supply "..PR_eu_supply.."+BA_eu_supply "..BA_eu_supply.." >= RE_eu_demand"..RE_eu_demand)
 		       for _,pos1 in pairs(RE_nodes) do
 			  meta1  = minetest.env:get_meta(pos1)
 			  local eu_demand = meta1:get_int(eu_demand_str)
@@ -335,7 +344,7 @@ minetest.register_abm(
 			  meta1  = minetest.env:get_meta(pos1)
 			  local eu_supply = meta1:get_int(eu_supply_str)
 			  meta1:set_int(eu_input_str, math.floor(eu_supply*charge_factor))
-			  --dprint("Discharging battery:"..math.floor(eu_supply*charge_factor))
+			  print("Discharging battery:"..math.floor(eu_supply*charge_factor))
 		       end
 		       return
 		    end
@@ -343,7 +352,7 @@ minetest.register_abm(
 		    -- If the PR+BA supply is not enough for the RE demand: Shut everything down!
 		    -- Note: another behaviour could also be imagined: provide the average power for all and let the node decide what happens.
 		    -- This is much simpler though: Not enough power for all==no power for all
-		    --print("NO POWER")
+		    print("NO POWER")
 		    for _,pos1 in pairs(RE_nodes) do
 		       meta1  = minetest.env:get_meta(pos1)
 		       meta1:set_int(eu_input_str, 0)
