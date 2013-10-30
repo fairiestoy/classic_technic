@@ -10,7 +10,7 @@
 --   The top side is setup as the "RE" side, the bottom as the "PR" side.
 --   Once the RE side is powered it will deliver power to the other side.
 --   Unused power is wasted just like any other producer!
---   
+--
 minetest.register_node(
    "technic:supply_converter", {
       description = "Supply Converter",
@@ -66,7 +66,7 @@ minetest.register_abm(
 		 local machine_name  = "Supply Converter"
 		 local meta          = minetest.env:get_meta(pos)
 		 local upgrade       = "" -- Replace with expansion slot later??
-		 
+
 		 -- High voltage on top, low at bottom regardless of converter direction
 		 local pos_up        = {x=pos.x, y=pos.y+1, z=pos.z}
 		 local pos_down      = {x=pos.x, y=pos.y-1, z=pos.z}
@@ -114,9 +114,9 @@ minetest.register_abm(
 
 		 if upgrade == "" then
 		    meta:set_string("infotext", machine_name.." has an empty converter slot");
-		    technic.unregister_LV_machine("technic:supply_converter")
-		    technic.unregister_MV_machine("technic:supply_converter")
-		    technic.unregister_HV_machine("technic:supply_converter")
+		    technic.unregister_LV_machine("technic:supply_converter:"..pos.x..','..pos.y..','..pos.z)
+		    technic.unregister_MV_machine("technic:supply_converter:"..pos.x..','..pos.y..','..pos.z)
+		    technic.unregister_HV_machine("technic:supply_converter:"..pos.x..','..pos.y..','..pos.z)
 		    meta:set_int("LV_EU_demand", 0)
 		    meta:set_int("LV_EU_supply", 0)
 		    meta:set_int("LV_EU_input",  0)
@@ -132,8 +132,8 @@ minetest.register_abm(
 		 -- State machine
 		 if upgrade == "MV-LV step down" and convert_MV_LV then
 		    -- Register machine type
-		    technic.register_LV_machine("technic:supply_converter","PR")
-		    technic.register_MV_machine("technic:supply_converter","RE")
+		    technic.register_LV_machine("technic:supply_converter:"..pos.x..','..pos.y..','..pos.z,"PR")
+		    technic.register_MV_machine("technic:supply_converter:"..pos.x..','..pos.y..','..pos.z,"RE")
 
 		    -- Power off automatically if no longer connected to a switching station
 		    technic.switching_station_timeout_count(pos, "MV")
@@ -156,8 +156,8 @@ minetest.register_abm(
 		    ---------------------------------------------------
 		 elseif upgrade == "LV-MV step up"   and convert_LV_MV then
 		    -- Register machine type
-		    technic.register_LV_machine("technic:supply_converter","RE")
-		    technic.register_MV_machine("technic:supply_converter","PR")
+		    technic.register_LV_machine("technic:supply_converter:"..pos.x..','..pos.y..','..pos.z,"RE")
+		    technic.register_MV_machine("technic:supply_converter:"..pos.x..','..pos.y..','..pos.z,"PR")
 
 		    -- Power off automatically if no longer connected to a switching station
 		    technic.switching_station_timeout_count(pos, "LV")
@@ -181,8 +181,8 @@ minetest.register_abm(
 
 		 elseif upgrade == "HV-MV step down" and convert_HV_MV then
 		    -- Register machine type
-		    technic.register_MV_machine("technic:supply_converter","PR")
-		    technic.register_HV_machine("technic:supply_converter","RE")
+		    technic.register_MV_machine("technic:supply_converter:"..pos.x..','..pos.y..','..pos.z,"PR")
+		    technic.register_HV_machine("technic:supply_converter:"..pos.x..','..pos.y..','..pos.z,"RE")
 
 		    -- Power off automatically if no longer connected to a switching station
 		    technic.switching_station_timeout_count(pos, "HV")
@@ -205,8 +205,8 @@ minetest.register_abm(
 		    ---------------------------------------------------
 		 elseif upgrade == "MV-HV step up"   and convert_MV_HV then
 		    -- Register machine type
-		    technic.register_MV_machine("technic:supply_converter","RE")
-		    technic.register_HV_machine("technic:supply_converter","PR")
+		    technic.register_MV_machine("technic:supply_converter:"..pos.x..','..pos.y..','..pos.z,"RE")
+		    technic.register_HV_machine("technic:supply_converter:"..pos.x..','..pos.y..','..pos.z,"PR")
 
 		    -- Power off automatically if no longer connected to a switching station
 		    technic.switching_station_timeout_count(pos, "MV")
