@@ -115,17 +115,17 @@ minetest.register_craft({
 minetest.register_tool("technic:blue_energy_crystal",
 {description = "Blue Energy Crystal",
 inventory_image = minetest.inventorycube("technic_diamond_block_blue.png", "technic_diamond_block_blue.png", "technic_diamond_block_blue.png"),
-tool_capabilities = {load=0,max_drop_level=0, groupcaps={fleshy={times={}, uses=10000, maxlevel=0}}}}) 
+tool_capabilities = {load=0,max_drop_level=0, groupcaps={fleshy={times={}, uses=10000, maxlevel=0}}}})
 
 minetest.register_tool("technic:green_energy_crystal",
 {description = "Green Energy Crystal",
 inventory_image = minetest.inventorycube("technic_diamond_block_green.png", "technic_diamond_block_green.png", "technic_diamond_block_green.png"),
-tool_capabilities = {load=0,max_drop_level=0, groupcaps={fleshy={times={}, uses=10000, maxlevel=0}}}}) 
+tool_capabilities = {load=0,max_drop_level=0, groupcaps={fleshy={times={}, uses=10000, maxlevel=0}}}})
 
 minetest.register_tool("technic:red_energy_crystal",
 {description = "Red Energy Crystal",
 inventory_image = minetest.inventorycube("technic_diamond_block_red.png", "technic_diamond_block_red.png", "technic_diamond_block_red.png"),
-tool_capabilities = {load=0,max_drop_level=0, groupcaps={fleshy={times={}, uses=10000, maxlevel=0}}}}) 
+tool_capabilities = {load=0,max_drop_level=0, groupcaps={fleshy={times={}, uses=10000, maxlevel=0}}}})
 
 
 minetest.register_craftitem( "technic:fine_copper_wire", {
@@ -170,21 +170,6 @@ minetest.register_craft({
 		{'default:steel_ingot', 'technic:copper_coil', 'default:steel_ingot'},
 		{'default:steel_ingot', 'technic:copper_coil', 'default:steel_ingot'},
 		{'default:steel_ingot', 'default:copper_ingot', 'default:steel_ingot'},
-	}
-})
-
-minetest.register_craftitem( "technic:lv_transformer", {
-	description = "Low Voltage Transformer",
-	inventory_image = "technic_lv_transformer.png",
-	on_place_on_ground = minetest.craftitem_place_item,
-})
-
-minetest.register_craft({
-	output = 'technic:lv_transformer',
-	recipe = {
-		{'default:iron_lump',   'default:iron_lump', 'default:iron_lump'},
-		{'technic:copper_coil', 'default:iron_lump', 'technic:copper_coil'},
-		{'default:iron_lump',   'default:iron_lump', 'default:iron_lump'},
 	}
 })
 
