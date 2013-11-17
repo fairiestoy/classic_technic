@@ -31,9 +31,10 @@ minetest.register_craftitem( ":technic:stainless_steel_ingot", {
 	inventory_image = "technic_stainless_steel_ingot.png",
 })
 
-minetest.register_craftitem( ":group:brass_ingot", {
+minetest.register_craftitem( ":technic:brass_ingot", {
 	description = "Brass Ingot",
 	inventory_image = "technic_brass_ingot.png",
+	groups = { brass_ingot=1 },
 })
 
 minetest.register_craft({
@@ -86,14 +87,14 @@ minetest.register_craft({
 
 minetest.register_craft({
 	output = "node group:brass_block",
-	recipe = {{"group:brass_ingot", "group:brass_ingot", "group:brass_ingot"},
-		  {"group:brass_ingot", "group:brass_ingot", "group:brass_ingot"},
-		  {"group:brass_ingot", "group:brass_ingot", "group:brass_ingot"}}
+	recipe = {{"technic:brass_ingot", "technic:brass_ingot", "technic:brass_ingot"},
+		  {"technic:brass_ingot", "technic:brass_ingot", "technic:brass_ingot"},
+		  {"technic:brass_ingot", "technic:brass_ingot", "technic:brass_ingot"}}
 })
 
 minetest.register_craft({
-	output = "craft group:brass_ingot 9",
-	recipe = {{"group:brass_block"}}
+	output = "craft technic:brass_ingot 9",
+	recipe = {{"technic:brass_block"}}
 })
 
 minetest.register_craft({
