@@ -24,7 +24,7 @@
                            else return end
                     end,
     })
-     
+
     minetest.register_craft({
             output = "technic:treetap",
             recipe = {
@@ -32,26 +32,40 @@
                     {"", "default:stick", "default:stick"}
             },
     })
-     
+
     minetest.register_craftitem("technic:raw_latex", {
             description = "Raw Latex",
             inventory_image = "technic_raw_latex.png",
     })
-     
+
     minetest.register_craft({
             type = "cooking",
             output = "technic:rubber",
             recipe = "technic:raw_latex",
     })
-     
+
     minetest.register_craftitem("technic:rubber", {
             description = "Rubber Fiber",
             inventory_image = "technic_rubber.png",
     })
 
+local time_scale = 1
+local time_speed = tonumber(minetest.setting_get("time_speed"))
+
+if time_speed and time_speed > 0 then
+	time_scale = 72 / time_speed
+end
+
+local rubberrefresh_interval = 60
+if rubberrefresh_interval*time_scale >= 1 then
+	rubberrefresh_interval = rubberrefresh_interval*time_scale
+else
+	rubberrefresh_interval = 1
+end
+
 minetest.register_abm({
 	nodenames = {"moretrees:rubber_tree_trunk_empty"},
-	interval = 60,
+	interval = rubberrefresh_interval,
 	chance = 15,
 	action = function(pos, node)
 		node.name = "moretrees:rubber_tree_trunk"
