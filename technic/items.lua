@@ -34,6 +34,21 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = 'pipeworks:conductor_tube_off_000000 4',
+	recipe = {
+		{'default:mese_crystal', 'pipeworks:tube_000000', 'default:mese_crystal'},
+		}
+})
+
+minetest.register_craft({
+	output = 'pipeworks:crossing_tube_000000 2',
+	recipe = {
+		{'pipeworks:tube_000000', 'pipeworks:tube_000000', ''},
+		{'pipeworks:tube_000000', 'pipeworks:tube_000000', ''},
+		}
+})
+
+minetest.register_craft({
     output = 'pipeworks:accelerator_tube_000000',
     recipe = {
         {'technic:copper_coil', 'pipeworks:tube_000000', 'technic:copper_coil'},
