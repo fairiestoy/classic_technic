@@ -183,4 +183,8 @@ function lazer_it (pos, player)
 	if player then
 		minetest.node_dig(pos,node,player)
 	end
+<<<<<<< HEAD
 end
+=======
+end
+>>>>>>> 99d2f72feb4164395f190010c0f434895a0bb3bf

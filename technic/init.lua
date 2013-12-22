@@ -19,7 +19,7 @@ dofile(modpath.."/config.lua")
 --helper functions
 dofile(modpath.."/helpers.lua")
 
---items 
+--items
 dofile(modpath.."/items.lua")
 
 -- Register functions

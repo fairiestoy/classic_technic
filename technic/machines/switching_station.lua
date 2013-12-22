@@ -265,7 +265,11 @@ minetest.register_abm(
 		       meta1  = minetest.env:get_meta(pos1)
 		       RE_eu_demand = RE_eu_demand + meta1:get_int(eu_demand_str)
 		    end
+<<<<<<< HEAD
 -- 		    print("Total RE demand:"..RE_eu_demand)
+=======
+		    print("Total RE demand:"..RE_eu_demand)
+>>>>>>> 680774a7809447c59d4463c29d0238215b2311f3
 
 		    -- Get all the power from the BA nodes
 		    local BA_eu_supply = 0
@@ -273,7 +277,11 @@ minetest.register_abm(
 		       meta1  = minetest.env:get_meta(pos1)
 		       BA_eu_supply = BA_eu_supply + meta1:get_int(eu_supply_str)
 		    end
+<<<<<<< HEAD
 -- 		    print("Total BA supply:"..BA_eu_supply)
+=======
+		    print("Total BA supply:"..BA_eu_supply)
+>>>>>>> 680774a7809447c59d4463c29d0238215b2311f3
 
 		    -- Get all the demand from the BA nodes
 		    local BA_eu_demand = 0
@@ -281,13 +289,21 @@ minetest.register_abm(
 		       meta1  = minetest.env:get_meta(pos1)
 		       BA_eu_demand = BA_eu_demand + meta1:get_int(eu_demand_str)
 		    end
+<<<<<<< HEAD
 -- 		    print("Total BA demand:"..BA_eu_demand)
+=======
+		    print("Total BA demand:"..BA_eu_demand)
+>>>>>>> 680774a7809447c59d4463c29d0238215b2311f3
 
 		    meta:set_string("infotext", "Switching Station. PR("..(PR_eu_supply+BA_eu_supply)..") RE("..(RE_eu_demand+BA_eu_demand)..")")
 
 		    -- If the PR supply is enough for the RE demand supply them all
 		    if PR_eu_supply >= RE_eu_demand then
+<<<<<<< HEAD
 -- 		       print("PR_eu_supply"..PR_eu_supply.." >= RE_eu_demand"..RE_eu_demand)
+=======
+		       print("PR_eu_supply"..PR_eu_supply.." >= RE_eu_demand"..RE_eu_demand)
+>>>>>>> 680774a7809447c59d4463c29d0238215b2311f3
 		       for _,pos1 in pairs(RE_nodes) do
 			  meta1  = minetest.env:get_meta(pos1)
 			  local eu_demand = meta1:get_int(eu_demand_str)
@@ -304,7 +320,11 @@ minetest.register_abm(
 			  meta1  = minetest.env:get_meta(pos1)
 			  local eu_demand = meta1:get_int(eu_demand_str)
 			  meta1:set_int(eu_input_str, math.floor(eu_demand*charge_factor))
+<<<<<<< HEAD
 -- 			  print("Charging battery:"..math.floor(eu_demand*charge_factor))
+=======
+			  print("Charging battery:"..math.floor(eu_demand*charge_factor))
+>>>>>>> 680774a7809447c59d4463c29d0238215b2311f3
 		       end
 		       -- If still a surplus we can start giving back to the fuel burning generators
 		       -- Only full EU packages are given back. The rest is wasted.
@@ -328,7 +348,11 @@ minetest.register_abm(
 
 		    -- If the PR supply is not enough for the RE demand we will discharge the batteries too
 		    if PR_eu_supply+BA_eu_supply >= RE_eu_demand then
+<<<<<<< HEAD
 -- 		       print("PR_eu_supply "..PR_eu_supply.."+BA_eu_supply "..BA_eu_supply.." >= RE_eu_demand"..RE_eu_demand)
+=======
+		       print("PR_eu_supply "..PR_eu_supply.."+BA_eu_supply "..BA_eu_supply.." >= RE_eu_demand"..RE_eu_demand)
+>>>>>>> 680774a7809447c59d4463c29d0238215b2311f3
 		       for _,pos1 in pairs(RE_nodes) do
 			  meta1  = minetest.env:get_meta(pos1)
 			  local eu_demand = meta1:get_int(eu_demand_str)
@@ -344,7 +368,11 @@ minetest.register_abm(
 			  meta1  = minetest.env:get_meta(pos1)
 			  local eu_supply = meta1:get_int(eu_supply_str)
 			  meta1:set_int(eu_input_str, math.floor(eu_supply*charge_factor))
+<<<<<<< HEAD
 -- 			  print("Discharging battery:"..math.floor(eu_supply*charge_factor))
+=======
+			  print("Discharging battery:"..math.floor(eu_supply*charge_factor))
+>>>>>>> 680774a7809447c59d4463c29d0238215b2311f3
 		       end
 		       return
 		    end
@@ -352,7 +380,11 @@ minetest.register_abm(
 		    -- If the PR+BA supply is not enough for the RE demand: Shut everything down!
 		    -- Note: another behaviour could also be imagined: provide the average power for all and let the node decide what happens.
 		    -- This is much simpler though: Not enough power for all==no power for all
+<<<<<<< HEAD
 -- 		    print("NO POWER")
+=======
+		    print("NO POWER")
+>>>>>>> 680774a7809447c59d4463c29d0238215b2311f3
 		    for _,pos1 in pairs(RE_nodes) do
 		       meta1  = minetest.env:get_meta(pos1)
 		       meta1:set_int(eu_input_str, 0)
