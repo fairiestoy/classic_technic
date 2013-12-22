@@ -53,7 +53,7 @@ function unified_inventory.set_home(player, pos)
 	for k, v in pairs(unified_inventory.home_pos) do
 		if v ~= nil then
 			output:write(math.floor(v.x).." "
-					..math.floor(v.y).." "
+					..math.ceil(v.y).." "
 					..math.floor(v.z).." "
 					..k.."\n")
 		end
