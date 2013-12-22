@@ -105,10 +105,10 @@ minetest.register_abm(
 		    meta:set_int("tube_time", 0)
 		    return
 		 end
-			 
+
 		 -- Power off automatically if no longer connected to a switching station
 		 technic.switching_station_timeout_count(pos, "LV")
-			 
+
 		 -- State machine
 		 if eu_input == 0 then
 		    -- Unpowered - go idle
@@ -117,7 +117,7 @@ minetest.register_abm(
 		    next_state = 1
 		 elseif eu_input == machine_state_demand[state] then
 		    -- Powered - do the state specific actions
-			    
+
 		    -- Execute always if powered logic
 		    local inv    = meta:get_inventory()
 		    local empty  = 1
@@ -134,7 +134,7 @@ minetest.register_abm(
 		       src_item2 = src2stack:to_table()
 		       empty     = 0
 		    end
-	       
+
 		    if src_item1 and src_item2 then
 		       recipe = technic.get_alloy_recipe(src_item1,src_item2)
 		    end
@@ -142,14 +142,14 @@ minetest.register_abm(
 		       result = { name=recipe.dst_name, count=recipe.dst_count}
 		    end
 
-		    if recipe then
-		       print("recipe "..recipe.dst_name.." : result "..result.name.." : empty "..empty.." : src_item1 "..src_item1.name.." : src_item2 "..src_item2.name)
-		    end
+-- 		    if recipe then
+-- 		       print("recipe "..recipe.dst_name.." : result "..result.name.." : empty "..empty.." : src_item1 "..src_item1.name.." : src_item2 "..src_item2.name)
+-- 		    end
 
 		    if state == 1 then
 		       hacky_swap_node(pos, machine_node)
 		       meta:set_string("infotext", machine_name.." Idle")
-		       
+
 		       if empty == 0 and recipe and inv:room_for_item("dst", result) then
 			  meta:set_string("infotext", machine_name.." Active")
 			  meta:set_string("src_time", 0)
@@ -272,10 +272,10 @@ minetest.register_abm({
 		-- Get what to cook if anything
 		local srcstack = inv:get_stack("src", 1)
 		if srcstack then src_item1=srcstack:to_table() end
-		
+
 		local src2stack = inv:get_stack("src2", 1)
 		if src2stack then src_item2=src2stack:to_table() end
-		
+
 		if src_item1 and src_item2 then
 		   recipe = technic.get_alloy_recipe(src_item1,src_item2)
 		end
@@ -297,13 +297,13 @@ minetest.register_abm({
 			 inv:set_stack("src2", 1, src2stack)
 			 -- Put result in "dst" list
 			 inv:add_item("dst",dst_stack)
-		      else
-			 print("Furnace inventory full!") -- Silly code...
+--[[		      else
+			 print("Furnace inventory full!")]] -- Silly code...
 		      end
 		      meta:set_string("src_time", 0)
 		   end
 		end
-		
+
 		if meta:get_float("fuel_time") < meta:get_float("fuel_totaltime") then
 		   local percent = math.floor(meta:get_float("fuel_time") /
 					   meta:get_float("fuel_totaltime") * 100)
