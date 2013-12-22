@@ -20,7 +20,7 @@ minetest.after(0.01, function()
 	end
 	table.sort(unified_inventory.items_list)
 	unified_inventory.items_list_size = #unified_inventory.items_list
-	print("Unified Inventory. inventory size: "..#unified_inventory.items_list)
+-- 	print("Unified Inventory. inventory size: "..#unified_inventory.items_list)
 end)
 
 

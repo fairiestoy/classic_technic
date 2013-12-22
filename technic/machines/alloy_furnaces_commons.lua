@@ -4,7 +4,7 @@ technic.alloy_recipes = {}
 -- Register recipe in a table
 technic.register_alloy_recipe = function(metal1, count1, metal2, count2, result, count3)
 	technic.alloy_recipes[metal1..metal2] = { src1_count = count1, src2_count = count2, dst_name = result, dst_count = count3 }
-	if unified_inventory then
+	if minetest.get_modpath("unified_inventory") ~= nil then
 		unified_inventory.register_craft(
 		{
 			type = "alloy",
@@ -56,29 +56,29 @@ alloy_recipes = {}
 registered_recipes_count = 1
 
 function register_alloy_recipe (string1,count1, string2,count2, string3,count3)
-   alloy_recipes[registered_recipes_count]={}
-   alloy_recipes[registered_recipes_count].src1_name=string1
-   alloy_recipes[registered_recipes_count].src1_count=count1
-   alloy_recipes[registered_recipes_count].src2_name=string2
-   alloy_recipes[registered_recipes_count].src2_count=count2
-   alloy_recipes[registered_recipes_count].dst_name=string3
-   alloy_recipes[registered_recipes_count].dst_count=count3
-   registered_recipes_count=registered_recipes_count+1
-   alloy_recipes[registered_recipes_count]={}
-   alloy_recipes[registered_recipes_count].src1_name=string2
-   alloy_recipes[registered_recipes_count].src1_count=count2
-   alloy_recipes[registered_recipes_count].src2_name=string1
-   alloy_recipes[registered_recipes_count].src2_count=count1
-   alloy_recipes[registered_recipes_count].dst_name=string3
-   alloy_recipes[registered_recipes_count].dst_count=count3
-   registered_recipes_count=registered_recipes_count+1
-   if unified_inventory then
-      unified_inventory.register_craft({
-		  type = "alloy",
-		  output = string3.." "..count3,
-		  items = {string1.." "..count1,string2.." "..count2},
-		  width = 2,
-	       })
+	alloy_recipes[registered_recipes_count]={}
+	alloy_recipes[registered_recipes_count].src1_name=string1
+	alloy_recipes[registered_recipes_count].src1_count=count1
+	alloy_recipes[registered_recipes_count].src2_name=string2
+	alloy_recipes[registered_recipes_count].src2_count=count2
+	alloy_recipes[registered_recipes_count].dst_name=string3
+	alloy_recipes[registered_recipes_count].dst_count=count3
+	registered_recipes_count=registered_recipes_count+1
+	alloy_recipes[registered_recipes_count]={}
+	alloy_recipes[registered_recipes_count].src1_name=string2
+	alloy_recipes[registered_recipes_count].src1_count=count2
+	alloy_recipes[registered_recipes_count].src2_name=string1
+	alloy_recipes[registered_recipes_count].src2_count=count1
+	alloy_recipes[registered_recipes_count].dst_name=string3
+	alloy_recipes[registered_recipes_count].dst_count=count3
+	registered_recipes_count=registered_recipes_count+1
+	if minetest.get_modpath("unified_inventory") ~= nil then
+		unified_inventory.register_craft({
+		type = "alloy",
+		output = string3.." "..count3,
+		items = {string2.." "..count2,string1.." "..count1},
+		width = 2,
+		})
    end
 end
 

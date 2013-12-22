@@ -217,11 +217,25 @@ unified_inventory.register_page("craftguide", {
 						.."ui_group.png;;"
 						..minetest.formspec_escape(group).."]"
 				else
-					formspec = formspec.."item_image_button["
-						..(1.0 + x)..","..(0.0 + y)..";1.1,1.1;"
-						..minetest.formspec_escape(item)..";"
-						.."item_button_"
-						..minetest.formspec_escape(item)..";]"
+					local useditemcount = 0
+					local useditemraw = nil
+					if string.match(item, '%s%d+$') ~= nil then
+						useditemcount = tonumber(tonumber(string.match(item, '%s(%d+)$')))
+						useditemraw = string.match(item, '(%g+)%s%d+$')
+					end
+					if useditemcount > 0 then
+						formspec = formspec.."item_image_button["
+							..(1.0 + x)..","..(0.0 + y)..";1.1,1.1;"
+							..minetest.formspec_escape(useditemraw)..";"
+							.."item_button_"
+							..minetest.formspec_escape(useditemraw)..";"..tostring(useditemcount).."]"
+					else
+						formspec = formspec.."item_image_button["
+							..(1.0 + x)..","..(0.0 + y)..";1.1,1.1;"
+							..minetest.formspec_escape(item)..";"
+							.."item_button_"
+							..minetest.formspec_escape(item)..";]"
+					end
 				end
 			end
 			i = i + 1
