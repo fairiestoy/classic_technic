@@ -1,4 +1,4 @@
---Minetest 0.4.7 mod: concrete 
+--Minetest 0.4.7 mod: concrete
 --(c) 2013 by RealBadAngel <mk@realbadangel.pl>
 
 minetest.register_craft({
@@ -126,7 +126,7 @@ minetest.register_node(":technic:concrete_post_platform", {
 	paramtype = "light",
 	light_source = 0,
 	sunlight_propagates = true,
-	drawtype = "nodebox", 
+	drawtype = "nodebox",
 	selection_box = {
 		type = "fixed",
 		fixed = {platform_box}
@@ -137,14 +137,14 @@ minetest.register_node(":technic:concrete_post_platform", {
 		},
 	on_place=function (itemstack, placer, pointed_thing)
 	local node=minetest.env:get_node(pointed_thing.under)
-	if minetest.get_item_group(node.name, "concrete_post")==0 then 
-		return minetest.item_place_node(itemstack, placer, pointed_thing) 
+	if minetest.get_item_group(node.name, "concrete_post")==0 then
+		return minetest.item_place_node(itemstack, placer, pointed_thing)
 	end
 	local meta=minetest.env:get_meta(pointed_thing.under)
 	y1=meta:get_float("y1")
 	platform=meta:get_float("platform")
-	if y1==1 or platform==1 then 
-		return minetest.item_place_node(itemstack, placer, pointed_thing) 
+	if y1==1 or platform==1 then
+		return minetest.item_place_node(itemstack, placer, pointed_thing)
 	end
 	y2=meta:get_float("y2")
 	x1=meta:get_float("x1")
@@ -169,7 +169,7 @@ minetest.register_node(":technic:concrete_post", {
 	paramtype = "light",
 	light_source = 0,
 	sunlight_propagates = true,
-	drawtype = "nodebox", 
+	drawtype = "nodebox",
 	selection_box = {
 		type = "fixed",
 		fixed = { -0.15 , -0.5 , -0.15 , 0.15 ,  0.5 , 0.15 }},
@@ -202,13 +202,13 @@ for x1 = 0, 1, 1 do	--x-
 	for x2 = 0, 1, 1 do	--x+
 		for z1 = 0, 1, 1 do	--z-
 			for z2 = 0, 1, 1 do	--z+
-     
+
 				temp_x1={} temp_x2={} temp_z1={} temp_z2={}
 
-					if x1==1 then 	temp_x1=post_str_x1  end 
-					if x2==1 then 	temp_x2=post_str_x2  end 
-					if z1==1 then 	temp_z1=post_str_z1  end 
-					if z2==1 then 	temp_z2=post_str_z2  end 
+					if x1==1 then 	temp_x1=post_str_x1  end
+					if x2==1 then 	temp_x2=post_str_x2  end
+					if z1==1 then 	temp_z1=post_str_z1  end
+					if z2==1 then 	temp_z2=post_str_z2  end
 
 
 minetest.register_node(":technic:concrete_post"..count, {
@@ -220,7 +220,7 @@ minetest.register_node(":technic:concrete_post"..count, {
 	paramtype = "light",
 	light_source = 0,
 	sunlight_propagates = true,
-	drawtype = "nodebox", 
+	drawtype = "nodebox",
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -248,7 +248,7 @@ minetest.register_node(":technic:concrete_post"..count+16, {
 	paramtype = "light",
 	light_source = 0,
 	sunlight_propagates = true,
-	drawtype = "nodebox", 
+	drawtype = "nodebox",
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -277,7 +277,7 @@ minetest.register_node(":technic:concrete_post32", {
 	paramtype = "light",
 	light_source = 0,
 	sunlight_propagates = true,
-	drawtype = "nodebox", 
+	drawtype = "nodebox",
 	selection_box = {
 		type = "fixed",
 		fixed = {-0.5,-0.3,-0.1,0.5,0.3,0.1},
@@ -301,7 +301,7 @@ minetest.register_node(":technic:concrete_post33", {
 	paramtype = "light",
 	light_source = 0,
 	sunlight_propagates = true,
-	drawtype = "nodebox", 
+	drawtype = "nodebox",
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -327,7 +327,7 @@ minetest.register_node(":technic:concrete_post34", {
 	paramtype = "light",
 	light_source = 0,
 	sunlight_propagates = true,
-	drawtype = "nodebox", 
+	drawtype = "nodebox",
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -352,7 +352,7 @@ minetest.register_node(":technic:concrete_post35", {
 	paramtype = "light",
 	light_source = 0,
 	sunlight_propagates = true,
-	drawtype = "nodebox", 
+	drawtype = "nodebox",
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -375,7 +375,7 @@ dig_post_with_platform = function (pos,oldnode,oldmetadata)
 	y2=tonumber(oldmetadata.fields["y2"])
 	z1=tonumber(oldmetadata.fields["z1"])
 	z2=tonumber(oldmetadata.fields["z2"])
-	print(dump(x1))
+	--print(dump(x1))
 	oldmetadata.fields["platform"]="0"
 	local rule=make_post_rule_number(x1,x2,y1,y2,z1,z2,0)
 	--print(dump(rule))
@@ -383,7 +383,7 @@ dig_post_with_platform = function (pos,oldnode,oldmetadata)
 	minetest.env:set_node(pos,oldnode)
 	meta = minetest.env:get_meta(pos)
 	meta:from_table(oldmetadata)
-end	
+end
 
 check_post_connections = function(pos,mode)
 		local pos1={}
@@ -396,7 +396,7 @@ check_post_connections = function(pos,mode)
 		tempy2=0
 		tempz1=0
 		tempz2=0
-		
+
 		pos1.x=pos1.x+1
 		if minetest.env:get_meta(pos1):get_int("postlike")==1 then
 			x2=mode
@@ -430,7 +430,7 @@ check_post_connections = function(pos,mode)
 		end
 
 		pos1.x=pos1.x+1
-		
+
 		pos1.y=pos1.y+1
 		if minetest.env:get_meta(pos1):get_int("postlike")==1 then
 			y2=mode
@@ -480,7 +480,7 @@ check_post_connections = function(pos,mode)
 			tempz1=mode
 		end
 		pos1.z=pos1.z-2
-		
+
 		if minetest.env:get_meta(pos1):get_int("postlike")==1 then
 			z1=mode
 			x1=minetest.env:get_meta(pos1):get_int("x1")
@@ -496,8 +496,8 @@ check_post_connections = function(pos,mode)
 			tempz2=mode
 		end
 		pos1.z=pos1.z+1
-		
-		if mode==1 then 
+
+		if mode==1 then
 			meta=minetest.env:get_meta(pos)
 			meta:set_int("x1",tempx1)
 			meta:set_int("x2",tempx2)
@@ -508,13 +508,13 @@ check_post_connections = function(pos,mode)
 			rule=make_post_rule_number(tempx1,tempx2,tempy1,tempy2,tempz1,tempz2,0)
 			hacky_swap_posts(pos,"technic:concrete_post"..rule)
 		end
-end	
+end
 
 function make_post_rule_number (x1,x2,y1,y2,z1,z2,platform)
 	local tempy=y1+y2
 	local tempx=x1+x2
 	local tempz=z1+z2
-	if platform==0 then 
+	if platform==0 then
 		if tempy==0 and tempx==0 and tempz==0 then return 0 end
 		if x1==1 and x2==1 and tempz==0 and tempy==0 then return 32 end
 		if z1==1 and z2==1 and tempx==0 and tempy==0 then return 33 end
