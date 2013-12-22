@@ -103,3 +103,32 @@ function unified_inventory.is_creative(playername)
 		return true
 	end
 end
+
+minetest.register_chatcommand("home", {
+	param = "",
+	description = "Spawns player on his home position",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return
+		end
+		unified_inventory.go_home(player)
+		minetest.sound_play("teleport", {to_player=player:get_player_name(), gain = 1.0})
+	end,
+})
+
+minetest.register_chatcommand("sethome", {
+	param = "",
+	description = "Set players home position",
+	func = function(name, param)
+		local player = minetest.get_player_by_name(name)
+		if not player then
+			return
+		end
+		local player_name = player:get_player_name()
+		local pos = player:getpos()
+		unified_inventory.set_home(player, pos)
+		minetest.sound_play("dingdong", {to_player=player_name, gain = 1.0})
+		minetest.chat_send_player(player_name, "Home position set to: "..minetest.pos_to_string(pos))
+	end,
+})
